@@ -20,6 +20,12 @@ const flappyBird = {
             this.x, this.y,
             this.largura, this.altura
         )
+    },
+    velocidade: 0,
+    gravidade: 0.25,
+    atualiza() {
+        this.velocidade += this.gravidade
+        this.y = this.y + this.velocidade
     }
 }
 
@@ -31,6 +37,8 @@ const planoDeFundo = {
     x: 0,
     y: 280,
     desenha() {
+        contexto.fillStyle = "#70c5ce"
+        contexto.fillRect(0,0, canvas.width, canvas.height)
         contexto.drawImage(
             sprites,
             this.spriteX, this.spriteY,
@@ -75,19 +83,6 @@ const chao = {
     }
 }
 
-contexto.fillStyle = "#70c5ce"
-contexto.fillRect(0,0, canvas.width, canvas.height)
-
-function loop() {
-    planoDeFundo.desenha()
-    chao.desenha()
-    flappyBird.desenha()
-
-    requestAnimationFrame(loop)
-}
-
-loop()
-
 const inicio = {
     spriteX: 130,
     spriteY: 0,
@@ -106,12 +101,21 @@ const inicio = {
     }
 }
 
+function mudaTelaAtiva() {
+    telaAtiva.click()
+}
+
+window.addEventListener("click", mudaTelaAtiva)
+
 const TelaInicio = {
     desenha() {
         planoDeFundo.desenha()
         chao.desenha()
         flappyBird.desenha()
         inicio.desenha()
+    },
+    click() {
+        telaAtiva = TelaJogo
     }
 }
 
@@ -120,5 +124,18 @@ const TelaJogo = {
         planoDeFundo.desenha()
         chao.desenha()
         flappyBird.desenha()
-    }
+        flappyBird.atualiza()
+    },
+    click() {}
 }
+
+var telaAtiva = TelaInicio
+
+
+function loop() {
+    telaAtiva.desenha()
+
+    requestAnimationFrame(loop)
+}
+
+loop()
