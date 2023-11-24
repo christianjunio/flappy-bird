@@ -4,6 +4,8 @@ sprites.src = './sprites.png'
 
 const canvas = document.querySelector("#game-canvas")
 const contexto = canvas.getContext('2d')
+const som_punch = new Audio()
+som_punch.src = './som/punch.wav'
 
 const flappyBird = {
     spriteX: 0,
@@ -24,10 +26,21 @@ const flappyBird = {
     velocidade: 0,
     gravidade: 0.25,
     atualiza() {
+        if(fazColisao()) {
+            som_punch.play()
+            telaAtiva = TelaInicio
+            return
+        }
         this.velocidade += this.gravidade
         this.y = this.y + this.velocidade
+    },
+    pulo: 4.6,
+    pula() {
+        this.velocidade = -this.pulo
     }
 }
+
+
 
 const planoDeFundo = {
     spriteX: 390,
@@ -101,6 +114,14 @@ const inicio = {
     }
 }
 
+function fazColisao() {
+    if (flappyBird.y >= 350) {
+        return true
+    } else {
+        return false
+    }
+}
+
 function mudaTelaAtiva() {
     telaAtiva.click()
 }
@@ -126,11 +147,12 @@ const TelaJogo = {
         flappyBird.desenha()
         flappyBird.atualiza()
     },
-    click() {}
+    click() {
+        flappyBird.pula()
+    }
 }
 
 var telaAtiva = TelaInicio
-
 
 function loop() {
     telaAtiva.desenha()
