@@ -28,6 +28,8 @@ const flappyBird = {
     atualiza() {
         if(fazColisao()) {
             som_punch.play()
+            flappyBird.y = 50
+            flappyBird.velocidade = 0
             telaAtiva = TelaInicio
             return
         }
@@ -39,7 +41,6 @@ const flappyBird = {
         this.velocidade = -this.pulo
     }
 }
-
 
 
 const planoDeFundo = {
@@ -115,7 +116,7 @@ const inicio = {
 }
 
 function fazColisao() {
-    if (flappyBird.y >= 350) {
+    if (flappyBird.y + flappyBird.altura > chao.y) {
         return true
     } else {
         return false
